@@ -4,6 +4,8 @@ import com.example.pony_project.exceptions.PonyNotFoundException;
 import com.example.pony_project.model.Pony;
 import com.example.pony_project.repository.PonyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,6 +61,26 @@ public class PonyService {
         return optionalPony.get();
     }
 
-//    public Pony patchPony(Pony pony, UUID id) {
-//    }
+    public Pony patchPony(Pony pony, UUID id) {
+        Optional<Pony> updatedPony = ponyRepository.findById(id);
+        if (pony.getId() == null) {
+            throw new PonyNotFoundException("A pony with that id does not exist.");
+        }
+        if (pony.getName() != null) {
+          updatedPony.get().setName(pony.getName());
+        }
+        if (pony.getColor() != null) {
+            updatedPony.get().setColor(pony.getColor());
+        }
+        if (pony.getIsUnicorn() != null) {
+            updatedPony.get().setIsUnicorn(pony.getIsUnicorn());
+        }
+        if (pony.getIsPegasus() != null) {
+            updatedPony.get().setIsPegasus(pony.getIsPegasus());
+        }
+        if (pony.getAge() != null) {
+            updatedPony.get().setAge(pony.getAge());
+        }
+        return ponyRepository.save(updatedPony.get());
+    }
 }

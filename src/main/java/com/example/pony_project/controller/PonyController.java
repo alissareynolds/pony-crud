@@ -65,18 +65,19 @@ public class PonyController {
 
         return new ResponseEntity<>(updatedPony, HttpStatus.OK);
     }
-//
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<Pony> patchPony(@PathVariable UUID id) {
-//          //if field not null that update/  check if old record exists if doesnt throw 404
-//     //check updated record to see it ifs null
-//        Pony updatedPony;
-//        try {
-//            updatedPony = ponyService.patchPony(id);
-//        } catch (PonyNotFoundException e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Pony> patchPony(@RequestBody Pony pony, @PathVariable UUID id) {
+          //if field not null that update check if old record exists if doesnt throw 404
+     //check updated record to see it ifs null
+        Pony updatedPony;
+        try {
+            updatedPony = ponyService.patchPony(pony, id);
+        } catch (PonyNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(updatedPony, HttpStatus.OK);
+    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Pony> deletePonyById(@PathVariable UUID id) {
