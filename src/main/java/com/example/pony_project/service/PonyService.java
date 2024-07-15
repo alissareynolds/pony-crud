@@ -62,25 +62,26 @@ public class PonyService {
     }
 
     public Pony patchPony(Pony pony, UUID id) {
-        Optional<Pony> updatedPony = ponyRepository.findById(id);
-        if (pony.getId() == null) {
+        Optional<Pony> updatedPonyOptional = ponyRepository.findById(id);
+        if (updatedPonyOptional.isEmpty()) {
             throw new PonyNotFoundException("A pony with that id does not exist.");
         }
+        Pony updatedPony = updatedPonyOptional.get();
         if (pony.getName() != null) {
-          updatedPony.get().setName(pony.getName());
+          updatedPony.setName(pony.getName());
         }
         if (pony.getColor() != null) {
-            updatedPony.get().setColor(pony.getColor());
+            updatedPony.setColor(pony.getColor());
         }
         if (pony.getIsUnicorn() != null) {
-            updatedPony.get().setIsUnicorn(pony.getIsUnicorn());
+            updatedPony.setIsUnicorn(pony.getIsUnicorn());
         }
         if (pony.getIsPegasus() != null) {
-            updatedPony.get().setIsPegasus(pony.getIsPegasus());
+            updatedPony.setIsPegasus(pony.getIsPegasus());
         }
         if (pony.getAge() != null) {
-            updatedPony.get().setAge(pony.getAge());
+            updatedPony.setAge(pony.getAge());
         }
-        return ponyRepository.save(updatedPony.get());
+        return ponyRepository.save(updatedPony);
     }
 }
