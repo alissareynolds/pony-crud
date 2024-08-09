@@ -52,15 +52,6 @@ public class PonyService {
         return ponyRepository.save(updatedPony);
     }
 
-    public Pony deletePonyById(UUID id) {
-        Optional<Pony> optionalPony = ponyRepository.findById(id);
-        if (optionalPony.isEmpty()) {
-            throw new PonyNotFoundException("A pony with that id was not found.");
-        }
-        ponyRepository.delete(optionalPony.get());
-        return optionalPony.get();
-    }
-
     public Pony patchPony(Pony pony, UUID id) {
         Optional<Pony> updatedPonyOptional = ponyRepository.findById(id);
         if (updatedPonyOptional.isEmpty()) {
@@ -68,7 +59,7 @@ public class PonyService {
         }
         Pony updatedPony = updatedPonyOptional.get();
         if (pony.getName() != null) {
-          updatedPony.setName(pony.getName());
+            updatedPony.setName(pony.getName());
         }
         if (pony.getColor() != null) {
             updatedPony.setColor(pony.getColor());
@@ -84,4 +75,15 @@ public class PonyService {
         }
         return ponyRepository.save(updatedPony);
     }
+
+    public Pony deletePonyById(UUID id) {
+        Optional<Pony> optionalPony = ponyRepository.findById(id);
+        if (optionalPony.isEmpty()) {
+            throw new PonyNotFoundException("A pony with that id was not found.");
+        }
+        ponyRepository.delete(optionalPony.get());
+        return optionalPony.get();
+    }
+
+
 }
