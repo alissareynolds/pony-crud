@@ -4,10 +4,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Pony {
 
     @Id
@@ -23,27 +27,6 @@ public class Pony {
     private Boolean isPegasus;
 
     private Integer age;
-
-    public Pony() {
-
-    }
-
-    public Pony(UUID id, String name, String color, Boolean isUnicorn, Boolean isPegasus, Integer age) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-        this.isUnicorn = isUnicorn;
-        this.isPegasus = isPegasus;
-        this.age = age;
-    }
-
-    public Pony(String name, String color, Boolean isUnicorn, Boolean isPegasus, Integer age) {
-        this.name = name;
-        this.color = color;
-        this.isUnicorn = isUnicorn;
-        this.isPegasus = isPegasus;
-        this.age = age;
-    }
 
     public UUID getId() {
         return id;

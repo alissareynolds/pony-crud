@@ -2,10 +2,7 @@ package com.example.pony_project.controller;
 
 import com.example.pony_project.exceptions.PonyNotFoundException;
 import com.example.pony_project.model.Pony;
-import com.example.pony_project.repository.PonyRepository;
 import com.example.pony_project.service.PonyService;
-import jakarta.websocket.server.PathParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +14,22 @@ import java.util.UUID;
 @RequestMapping("/api/ponies")
 public class PonyController {
 
-    @Autowired
-    PonyService ponyService;
+    private final PonyService ponyService;
+
+    public PonyController(PonyService ponyService) {
+        this.ponyService = ponyService;
+    }
 
     @PostMapping
     public ResponseEntity<Pony> createPony(@RequestBody Pony pony) {
         Pony newPony = ponyService.create(pony);
         return new ResponseEntity<>(newPony, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Pony>> getAllPonies() {
+        List<Pony> ponies = ponyService.getAll();
+        return new ResponseEntity<>(ponies, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -37,28 +43,17 @@ public class PonyController {
         return new ResponseEntity<>(newPony, HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Pony>> getAllPonies() {
-        List<Pony> ponies = ponyService.findAllPonies();
-        return new ResponseEntity<>(ponies, HttpStatus.OK);
-    }
-
     @GetMapping("/name/{name}")
-    public ResponseEntity<Pony> getPonyByName(@PathVariable String name) {
-        Pony newPony;
-        try {
-            newPony = ponyService.getPonyByName(name);
-        } catch (PonyNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(newPony, HttpStatus.OK);
+    public ResponseEntity<List<Pony>> getPonyByName(@PathVariable String name) {
+        List<Pony> ponies = ponyService.getByName(name);
+        return new ResponseEntity<>(ponies, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Pony> updatePony(@RequestBody Pony pony, @PathVariable UUID id) {
         Pony updatedPony;
         try {
-           updatedPony = ponyService.updatePony(pony, id);
+           updatedPony = ponyService.update(pony, id);
         } catch (PonyNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -69,22 +64,17 @@ public class PonyController {
     public ResponseEntity<Pony> patchPony(@RequestBody Pony pony, @PathVariable UUID id) {
         Pony updatedPony;
         try {
-            updatedPony = ponyService.patchPony(pony, id);
+            updatedPony = ponyService.patch(pony, id);
         } catch (PonyNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(updatedPony, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Pony> deletePonyById(@PathVariable UUID id) {
-        Pony pony;
-        try {
-            pony = ponyService.deletePonyById(id);
-        } catch (PonyNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(pony, HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Pony> deletePony(@PathVariable UUID id) {
+        ponyService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
